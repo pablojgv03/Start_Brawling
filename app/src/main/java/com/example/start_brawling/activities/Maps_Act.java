@@ -1,11 +1,15 @@
 package com.example.start_brawling.activities;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +26,7 @@ public class Maps_Act extends AppCompatActivity {
     //Declaración de variables
     private RecyclerView recyclerView;
     private RecyclerAdapter_Maps adapter;
+    private ConstraintLayout layoutmap;
 
     private androidx.appcompat.view.ActionMode menu;
     @Override
@@ -31,6 +36,7 @@ public class Maps_Act extends AppCompatActivity {
         adapter = new RecyclerAdapter_Maps(this);
 
         new Maps_Act.taskConnections().execute("GET", "/maps");
+        layoutmap = (ConstraintLayout) findViewById(R.id.layoutmap);
 
         recyclerView = (RecyclerView) findViewById(R.id.recView);
 
@@ -38,6 +44,7 @@ public class Maps_Act extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+        loadPreferences();
     }
 
 
@@ -87,6 +94,16 @@ public class Maps_Act extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+    public void loadPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Maps_Act.this);
+        boolean modoOn = sharedPreferences.getBoolean("switch",false);
+        if(modoOn == true){
+
+            layoutmap.setBackgroundColor(Color.rgb(250,187,174));
+        }else{
+            layoutmap.setBackgroundColor(Color.WHITE);
         }
     }
 }

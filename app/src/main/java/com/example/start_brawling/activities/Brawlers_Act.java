@@ -1,9 +1,14 @@
 package com.example.start_brawling.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,13 +27,15 @@ public class Brawlers_Act extends AppCompatActivity {
     //Declaración de variables
     private RecyclerView recyclerView;
     private RecyclerAdapter_Brawlers adapter;
-
+    private ConstraintLayout layoutbr;
     private androidx.appcompat.view.ActionMode menu;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_brawlers);
         adapter = new RecyclerAdapter_Brawlers(this);
+        layoutbr = (ConstraintLayout) findViewById(R.id.layoutbr);
 
         new taskConnections().execute("GET", "/brawlers");
 
@@ -40,6 +47,8 @@ public class Brawlers_Act extends AppCompatActivity {
         //padre (RecyclerView) con sus respectivos métodos.
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+        loadPreferences();
+
     }
 
 
@@ -94,5 +103,14 @@ public class Brawlers_Act extends AppCompatActivity {
             }
         }
     }
+    public void loadPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Brawlers_Act.this);
+        boolean modoOn = sharedPreferences.getBoolean("switch",false);
+        if(modoOn == true){
 
+            layoutbr.setBackgroundColor(Color.rgb(250,187,174));
+        }else{
+            layoutbr.setBackgroundColor(Color.WHITE);
+        }
+    }
 }

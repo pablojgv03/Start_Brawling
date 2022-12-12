@@ -1,10 +1,15 @@
 package com.example.start_brawling.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,12 +29,15 @@ public class Events_Act extends AppCompatActivity {
     //Declaración de variables
     private RecyclerView recyclerView;
     private RecyclerAdapter_Events adapter;
+    ConstraintLayout layoutevent;
     int item;
     private androidx.appcompat.view.ActionMode menu;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
+        layoutevent = (ConstraintLayout) findViewById(R.id.layoutevent);
         Log.d("c","create");
 
         adapter = new RecyclerAdapter_Events(this);
@@ -40,8 +48,7 @@ public class Events_Act extends AppCompatActivity {
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
-        //Todo 3.2 Por último solo debemos añadir los elementos creados anteriormente a la vista
-        //Todo padre (RecyclerView) con sus respectivos métodos.
+        loadPreferences();
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
         adapter.setOnClickListener(new View.OnClickListener(){
@@ -123,6 +130,16 @@ public class Events_Act extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+    public void loadPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(Events_Act.this);
+        boolean modoOn = sharedPreferences.getBoolean("switch",false);
+        if(modoOn == true){
+
+            layoutevent.setBackgroundColor(Color.rgb(250,187,174));
+        }else{
+            layoutevent.setBackgroundColor(Color.WHITE);
         }
     }
 }

@@ -1,12 +1,17 @@
 package com.example.start_brawling.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -48,7 +53,9 @@ public class DetailEvent_Act extends AppCompatActivity {
     private int cursor = 0;
     private String sSub = "";
     private ArrayList<Brawlers_Class> brawlersStats = new ArrayList<Brawlers_Class>();
+    private ConstraintLayout layoutDetEvent;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +67,7 @@ public class DetailEvent_Act extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(layoutManager);
+        layoutDetEvent = (ConstraintLayout) findViewById(R.id.layoutDetEvent);
 
         txtNombre = (TextView) findViewById(R.id.txt_item_name);
         txtMapa = (TextView) findViewById(R.id.txt_event_map);
@@ -71,8 +79,9 @@ public class DetailEvent_Act extends AppCompatActivity {
         Intent i = getIntent();
 
         idIntent = i.getStringExtra("id");
-
+        loadPreferences();
         new DetailEvent_Act.taskConnections().execute("GET", "/events");
+
     }
 
     private class taskConnections extends AsyncTask<String,Void,String> {
@@ -190,6 +199,16 @@ public class DetailEvent_Act extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+        }
+    }
+    public void loadPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(DetailEvent_Act.this);
+        boolean modoOn = sharedPreferences.getBoolean("switch",false);
+        if(modoOn == true){
+
+            layoutDetEvent.setBackgroundColor(Color.rgb(250,187,174));
+        }else{
+            layoutDetEvent.setBackgroundColor(Color.WHITE);
         }
     }
 }

@@ -1,0 +1,17 @@
+package com.example.start_brawling.fragments;
+
+import android.os.Bundle;
+
+import androidx.preference.PreferenceFragmentCompat;
+
+import com.example.start_brawling.R;
+
+
+public class SettingsFragment extends PreferenceFragmentCompat {
+
+
+    @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        setPreferencesFromResource(R.xml.root_preferences, rootKey);
+    }
+}
