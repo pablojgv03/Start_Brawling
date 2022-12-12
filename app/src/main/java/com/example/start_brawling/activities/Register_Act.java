@@ -4,14 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.start_brawling.R;
 import com.example.start_brawling.classes.User_Class;
 import com.example.start_brawling.classes.userDB_Class;
+import com.soepic.sefancytoast.FancyToast;
+
 
 public class Register_Act extends AppCompatActivity implements View.OnClickListener{
     //Declaración de variables
@@ -45,16 +47,18 @@ public class Register_Act extends AppCompatActivity implements View.OnClickListe
                 u.setPassword(pas.getText().toString());
                 u.setName(nom.getText().toString());
                 u.setSurname(ap.getText().toString());
+                //compruebon que se han introducido todos los datos
                 if(!u.isNull()){
-                    Toast.makeText(this,"Error. Campos vacios", Toast.LENGTH_LONG).show();
+                    showToast("Error. Campos vacios", false);
                 }else{
                     if (bd.insertUser(u)){
-                        Toast.makeText(this,"Usuario registrado", Toast.LENGTH_LONG).show();
+                        showToast("Usuario registrado", true);
                         Intent i = new Intent(Register_Act.this, log_reg_Act.class );
                         startActivity(i);
                         finish();
                     }else{
-                        Toast.makeText(this,"Ya existe un usuario con ese nombre", Toast.LENGTH_LONG).show();
+                        showToast("Ya existe un usuario con ese nombre",false);
+
                     }
                 }
                 break;
@@ -65,4 +69,14 @@ public class Register_Act extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+    private void showToast(String msg, boolean error){
+        new FancyToast()
+                .with(this)// contexto
+                .setGravity(Gravity.BOTTOM,0,100)// gravity of FancyToast
+                .setText(msg)// set text for FancyToast
+                .cornerRadius(16)// corner radius of FancyToast view
+                .hideIcon(error)// show/hide icon
+                .show();// finally show the FancyToast
+    }
+
 }

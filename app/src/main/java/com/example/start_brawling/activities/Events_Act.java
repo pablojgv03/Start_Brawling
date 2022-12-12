@@ -97,28 +97,29 @@ public class Events_Act extends AppCompatActivity {
                     // que nada, se deberá consultar la documentación para conocer el formato de
                     // la respuesta del servidor, y así saber cómo deserializar el mensaje.
                     JSONObject jsonObject = new JSONObject(s);
-                    JSONArray jsonArray = jsonObject.getJSONArray("active");
+                    JSONArray jsonArrayAct = jsonObject.getJSONArray("active");
                     String id = "";
                     String name = "";
                     String efoto = "";
                     String modo = "";
                     //aqui separo los eventos en activos e inactivos
                     String disponibility = "Active";
-                    for(int i=0; i<jsonArray.length(); i++){
-                        id = jsonArray.getJSONObject(i).getJSONObject("slot").getString("id");
-                        name = jsonArray.getJSONObject(i).getJSONObject("slot").getString("name");
-                        efoto = jsonArray.getJSONObject(i).getJSONObject("map").getString("imageUrl");
-                        modo = jsonArray.getJSONObject(i).getJSONObject("map").getJSONObject("gameMode").getString("name");
+                    for(int i=0; i<jsonArrayAct.length(); i++){
+                        id = jsonArrayAct.getJSONObject(i).getJSONObject("slot").getString("id");
+                        name = jsonArrayAct.getJSONObject(i).getJSONObject("slot").getString("name");
+                        efoto = jsonArrayAct.getJSONObject(i).getJSONObject("map").getString("imageUrl");
+                        modo = jsonArrayAct.getJSONObject(i).getJSONObject("map").getJSONObject("gameMode").getString("name");
                         Events_Class event = new Events_Class(id, name, efoto, modo, disponibility);
                         adapter.add(event);
                     }
-                    jsonArray = jsonObject.getJSONArray("upcoming");
+                    //aqui obtengo el array de eventos inactivos
+                    JSONArray jsonArrayUpc = jsonObject.getJSONArray("upcoming");
                     disponibility = "Inactive";
-                    for(int i=0; i<jsonArray.length(); i++){
-                        id = jsonArray.getJSONObject(i).getJSONObject("slot").getString("id");
-                        name = jsonArray.getJSONObject(i).getJSONObject("slot").getString("name");
-                        efoto = jsonArray.getJSONObject(i).getJSONObject("map").getString("imageUrl");
-                        modo = jsonArray.getJSONObject(i).getJSONObject("map").getJSONObject("gameMode").getString("name");
+                    for(int i=0; i<jsonArrayUpc.length(); i++){
+                        id = jsonArrayUpc.getJSONObject(i).getJSONObject("slot").getString("id");
+                        name = jsonArrayUpc.getJSONObject(i).getJSONObject("slot").getString("name");
+                        efoto = jsonArrayUpc.getJSONObject(i).getJSONObject("map").getString("imageUrl");
+                        modo = jsonArrayUpc.getJSONObject(i).getJSONObject("map").getJSONObject("gameMode").getString("name");
                         Events_Class event = new Events_Class(id, name, efoto, modo, disponibility);
                         adapter.add(event);
                     }

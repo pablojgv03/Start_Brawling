@@ -6,15 +6,15 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
 import com.example.start_brawling.R;
 import com.example.start_brawling.classes.User_Class;
 import com.example.start_brawling.classes.userDB_Class;
+import com.soepic.sefancytoast.FancyToast;
 
 public class log_reg_Act extends AppCompatActivity implements View.OnClickListener{
     //Declaración de variables
@@ -52,18 +52,19 @@ public class log_reg_Act extends AppCompatActivity implements View.OnClickListen
                 String p=pass.getText().toString();
                 //en caso de que esten vacíos informo del error
                 if(u.equals("") || p.equals("")){
-                    Toast.makeText(this,"Error. Campos vacios", Toast.LENGTH_LONG).show();
+                    showToast("Error. Campos vacios", false);
                 }else{
                     //en caso de que tengan informacion la compruebo
                     if(db.login(u,p)==1){
                         User_Class ux = db.getUserByName(u,p);
-                        Toast.makeText(this,"Bienvenido", Toast.LENGTH_LONG).show();
+                        showToast("Bienvenido", true);
                         Intent i=new Intent(log_reg_Act.this, Home_Act.class );
                         i.putExtra("Id", ux.getId());
                         startActivity(i);
                     }else{
                         //no son correctos
-                        Toast.makeText(this,"Usuario y/o Contraseña incorrecto(s)", Toast.LENGTH_LONG).show();
+                        showToast("Usuario y/o Contraseña incorrecto(s)", false);
+
                     }
                 }
                 break;
@@ -82,5 +83,15 @@ public class log_reg_Act extends AppCompatActivity implements View.OnClickListen
                 startActivity(i4);
                 break;
         }
+    }
+    //Libreria externa
+    private void showToast(String msg, boolean error) {
+        new FancyToast()
+                .with(this)// contexto
+                .setGravity(Gravity.BOTTOM, 0, 100)// gravity of FancyToast
+                .setText(msg)// set text for FancyToast
+                .cornerRadius(16)// corner radius of FancyToast view
+                .hideIcon(error)// show/hide icon
+                .show();// finally show the FancyToast
     }
 }
